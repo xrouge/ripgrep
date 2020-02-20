@@ -32,6 +32,7 @@ members = [
   "crates/globset",
   "crates/grep",
   "crates/cli",
+  "crates/index",
   "crates/matcher",
   "crates/pcre2",
   "crates/printer",
