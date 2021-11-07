@@ -642,6 +642,7 @@ pub fn all_args_and_flags() -> Vec<RGArg> {
     flag_type_not(&mut args);
     flag_unrestricted(&mut args);
     flag_vimgrep(&mut args);
+    flag_vsgrep(&mut args);
     flag_with_filename(&mut args);
     flag_word_regexp(&mut args);
     args
@@ -3051,6 +3052,17 @@ printed more than once.
 "
     );
     let arg = RGArg::switch("vimgrep").help(SHORT).long_help(LONG);
+    args.push(arg);
+}
+
+fn flag_vsgrep(args: &mut Vec<RGArg>) {
+    const SHORT: &str = "Show results in Visual Studio compatible format.";
+    const LONG: &str = long!(
+        "\
+Show results with every match on its own line, including line numbers in ()
+"
+    );
+    let arg = RGArg::switch("vsgrep").help(SHORT).long_help(LONG);
     args.push(arg);
 }
 

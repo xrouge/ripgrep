@@ -48,6 +48,7 @@ struct Config {
     separator_field_context: Arc<Vec<u8>>,
     separator_path: Option<u8>,
     path_terminator: Option<u8>,
+    vsgrep: bool,
 }
 
 impl Default for Config {
@@ -73,6 +74,7 @@ impl Default for Config {
             separator_field_context: Arc::new(b"-".to_vec()),
             separator_path: None,
             path_terminator: None,
+            vsgrep: false,
         }
     }
 }
@@ -446,6 +448,12 @@ impl StandardBuilder {
         terminator: Option<u8>,
     ) -> &mut StandardBuilder {
         self.config.path_terminator = terminator;
+        self
+    }
+
+    /// Enable the use of "vsgrep" in the printer.
+    pub fn vsgrep(&mut self, yes: bool) -> &mut StandardBuilder {
+        self.config.vsgrep = yes;
         self
     }
 }
@@ -1212,10 +1220,21 @@ impl<'a, M: Matcher, W: WriteColor> StandardImpl<'a, M, W> {
         let sep = self.separator_field();
 
         if !self.config().heading {
-            self.write_path_field(sep)?;
+            if !self.config().vsgrep {
+                self.write_path_field(sep)?;
+            }
+            else {
+                self.write_path_field(b"(")?;
+            }
         }
+        
         if let Some(n) = line_number {
-            self.write_line_number(n, sep)?;
+            if self.config().heading || !self.config().vsgrep {
+               self.write_line_number(n, sep)?;
+            }
+            else {
+                self.write_line_number(n, b"):")?;
+            }
         }
         if let Some(n) = column {
             if self.config().column {

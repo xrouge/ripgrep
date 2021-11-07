@@ -790,7 +790,8 @@ impl ArgMatches {
             .separator_field_match(self.field_match_separator())
             .separator_field_context(self.field_context_separator())
             .separator_path(self.path_separator()?)
-            .path_terminator(self.path_terminator());
+            .path_terminator(self.path_terminator())
+            .vsgrep(self.is_present("vsgrep"));
         if separator_search {
             builder.separator_search(self.file_separator()?);
         }
@@ -1101,7 +1102,7 @@ impl ArgMatches {
     /// Returns true if and only if matches should be grouped with file name
     /// headings.
     fn heading(&self) -> bool {
-        if self.is_present("no-heading") || self.is_present("vimgrep") {
+        if self.is_present("no-heading") || self.is_present("vimgrep") || self.is_present("vsgrep") {
             false
         } else {
             cli::is_tty_stdout()
@@ -1166,6 +1167,7 @@ impl ArgMatches {
             || self.is_present("column")
             || self.is_present("pretty")
             || self.is_present("vimgrep")
+            || self.is_present("vsgrep")
     }
 
     /// The maximum number of columns allowed on each line.
@@ -1641,6 +1643,7 @@ impl ArgMatches {
             let path_stdin = Path::new("-");
             self.is_present("with-filename")
                 || self.is_present("vimgrep")
+                || self.is_present("vsgrep")
                 || paths.len() > 1
                 || paths
                     .get(0)
