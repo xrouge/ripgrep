@@ -1,3 +1,4 @@
+## Local Changes
 This fork of ripgrep is located at: https://github.com/xrouge/ripgrep
 
 There is a single difference compared to the main version:
@@ -14,5 +15,11 @@ Example:
 	target\release\rg --vimgrep vsgrep crates\
 
 The fork was necessary because [burntsushi rejected the suggestion](https://github.com/BurntSushi/ripgrep/discussions/1994)
-to add support for VS output format to the main program, replying:
+to add to the main program support for VS output format, replying:
 *Tools like Visual Studio should consider adapting to the grep format convention that has existed for decades.*
+
+## Build Instructions (Windows)
+	rustup update
+	cargo build --release
+	cargo test --all
+	target\release\rg --version
